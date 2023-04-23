@@ -1,7 +1,7 @@
-export const apiToken = '2bf70a83-1e78-461d-8ff5-3ee302415a40'; // Authentication token from project dashboard // apiToken
-export const tenant = 'arcms08'; // Tenant ID of the tenant you want to upload to
-export const channelId = '26'; // Channel ID of the channel you want to upload to
-export const apiRootUrl = 'api.appearition.com'; // API root URL
+export const apiToken = process.env.NEXT_PUBLIC_ApiToken; // Authentication token from project dashboard // apiToken
+export const tenant = process.env.NEXT_PUBLIC_Tenant; // Tenant ID of the tenant you want to upload to
+export const channelId = process.env.NEXT_PUBLIC_ChannelId; // Channel ID of the channel you want to upload to
+export const apiRootUrl = process.env.NEXT_PUBLIC_ApiRootUrl; // API root URL
 
 let providerName;
 let itemKey;

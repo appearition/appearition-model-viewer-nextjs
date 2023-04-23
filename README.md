@@ -7,11 +7,14 @@ A sample project demostrating how to use the content libray module for managing 
 ### Getting Started
 
 1. Clone the project
-2. Open `Appearition.js` file in `utils` folder and enter the following parameters:
+2. Rename `.env.example` file to `.env.local` and add the following values:
 
-- **auth token**: The auth token you created while registering the application.
-- **tenant**: The tenant name of your developer account. This is the name you used when you signed up.
-- **channel id / project id**: The channel id or project id in the settings page.
+```bash
+NEXT_PUBLIC_ApiToken= //The auth token you created while registering the application.
+NEXT_PUBLIC_Tenant=   //The tenant name of your developer account. This is the name you used when you signed up.
+NEXT_PUBLIC_ChannelId=  //The channel id or project id in the settings page.
+NEXT_PUBLIC_ApiRootUrl= // API root URL
+```
 
 3. Run the development server:
 
