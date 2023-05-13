@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import UploadModel from '@/components/UploadModel';
+import ModelViewerComponent from '@/components/ModelViewerComponent';
 
 export default function Home() {
+  const [modelUrl, setModelUrl] = useState(null);
+  const [arProvider, setArProvider] = useState('');
   return (
     <>
       <Head>
@@ -13,7 +17,15 @@ export default function Home() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <UploadModel />
+      {modelUrl && arProvider ? (
+        <ModelViewerComponent modelUrl={modelUrl} arProvider={arProvider} />
+      ) : (
+        <UploadModel
+          setModelUrl={setModelUrl}
+          arProvider={arProvider}
+          setArProvider={setArProvider}
+        />
+      )}
     </>
   );
 }
