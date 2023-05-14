@@ -69,9 +69,9 @@ const UploadModel = ({ arProvider, setArProvider, setModelUrl }) => {
       contentItemKey,
       contentItemProviderName
     );
-
+    console.log('sceneData', sceneData);
     const { text: sceneName, mediaType } = sceneData;
-    // console.log('sceneData', sceneData);
+
     console.log('sceneName', sceneName);
     console.log('mediaType', mediaType);
     setLoading(false);

@@ -1,17 +1,7 @@
-import { Image, Box, Text, keyframes, CloseButton } from '@chakra-ui/react';
 import { useEffect, useState, useRef } from 'react';
 import { isAndroid } from 'react-device-detect';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-
-const pulse = keyframes({
-  '60%': {
-    opacity: 0.5,
-  },
-  '100%': {
-    opacity: 0,
-  },
-});
 
 const Viewer8thWall = ({ url, closeViewer: closeViewer = () => {} }) => {
   const asset = useRef(null);
@@ -24,7 +14,6 @@ const Viewer8thWall = ({ url, closeViewer: closeViewer = () => {} }) => {
     if (!xrReady) return;
 
     const handleLoad = () => {
-      //console.log('asset loaded');
       setMounted(true);
       sceneRef.current.setAttribute(
         'gltf-model',
@@ -50,7 +39,6 @@ const Viewer8thWall = ({ url, closeViewer: closeViewer = () => {} }) => {
     gltf.setDRACOLoader(dracoLoader);
 
     gltf.load(url, function (gltf) {
-      //console.log(gltf.animations[0].name);
       setFirstAnim(gltf.animations[0].name);
     });
   }, [url]);
@@ -72,60 +60,29 @@ const Viewer8thWall = ({ url, closeViewer: closeViewer = () => {} }) => {
   if (xrReady) {
     return (
       <>
-        <Box
+        <div
           id='popup'
-          pos='absolute'
-          width='100vw'
-          height='50%'
-          alignItems='center'
-          justifyContent='center'
-          bottom='40%'
-          pointerEvents='none'
-          animation={`${pulse} 11.5s forwards`}
-          zIndex='5'
-          display='none'
+          className='absolute w-screen h-1/2 flex items-center justify-center bottom-40 pointer-events-none animate-pulse z-50 invisible'
         >
-          <Image
-            opacity='0.5'
-            pos='absolute'
-            maxW='80%'
-            margin='0'
-            top='50%'
-            left='50%'
+          <img
+            className='opacity-50 absolute max-w-4/5 m-0 top-50 left-50 transform translate-x-[-50%] translate-y-50'
             src='/assets/Popup.png'
             alt='popup'
-            transform='translate(-50%, 50%)'
           />
-          <Text
-            pos='absolute'
-            width='80%'
-            textAlign='center'
-            fontSize='sm'
-            margin='0'
-            bottom='-8%'
-            left='50%'
-            paddingLeft='10px'
-            paddingRight='10px'
-            paddingBottom='10px'
-            transform='translate(-50%, -50%)'
-            color='white'
-          >
+          <div className='absolute w-4/5 text-center text-sm m-0 bottom-[-8%] left-50 pl-10 pr-10 pb-10 transform translate-x-[-50%] translate-y-[-50%] text-white'>
             Tap on the floor to place the 3d model.
-            <Text color='white'>
+            <div className='text-white'>
               Once placed, you can reposition, rotate, rescale it.
-            </Text>
-          </Text>
-        </Box>
+            </div>
+          </div>
+        </div>
         {isAndroid && (
-          <CloseButton
-            pos='absolute'
-            top='30px'
-            left='20px'
+          <button
+            className='absolute top-7 left-5 z-10 text-lg text-white'
             onClick={closeViewer}
-            zIndex='10'
-            size='lg'
-            color='white'
-          />
+          >
+            X
+          </button>
         )}
         <a-scene
           ref={sceneRef}
