@@ -29,19 +29,19 @@ const Viewer8thWall = ({ url, closeViewer: closeViewer = () => {} }) => {
     };
   }, [xrReady]);
 
-  useEffect(() => {
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath(
-      'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/js/libs/draco/'
-    );
+  // useEffect(() => {
+  //   const dracoLoader = new DRACOLoader();
+  //   dracoLoader.setDecoderPath(
+  //     'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/js/libs/draco/'
+  //   );
 
-    const gltf = new GLTFLoader();
-    gltf.setDRACOLoader(dracoLoader);
+  //   const gltf = new GLTFLoader();
+  //   gltf.setDRACOLoader(dracoLoader);
 
-    gltf.load(url, function (gltf) {
-      setFirstAnim(gltf.animations[0].name);
-    });
-  }, [url]);
+  //   gltf.load(url, function (gltf) {
+  //     setFirstAnim(gltf.animations[0].name);
+  //   });
+  // }, [url]);
 
   useEffect(() => {
     const watchWindow = setInterval(() => {
@@ -137,7 +137,7 @@ const Viewer8thWall = ({ url, closeViewer: closeViewer = () => {} }) => {
               scale='10 10 10'
               shadow='receive: false'
               visible='false'
-              animation-mixer={`clip: ${firstAnim}; loop: repeat; clampWhenFinished: true;`}
+              // animation-mixer={`clip: ${firstAnim}; loop: repeat; clampWhenFinished: true;`}
             ></a-entity>
           )}
           <a-plane
