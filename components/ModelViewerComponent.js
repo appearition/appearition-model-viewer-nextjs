@@ -13,7 +13,7 @@ const ModelViewerComponent = ({
 
   if (initate8thWall) {
     return (
-      <div width='100vw' height='100vh'>
+      <div style={{ width: '100%', height: '100%' }}>
         <Viewer8thWall
           url={modelUrl}
           closeViewer={() => setInitate8thWall(!initate8thWall)}
