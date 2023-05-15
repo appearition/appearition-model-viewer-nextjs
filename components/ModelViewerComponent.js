@@ -1,5 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import Viewer8thWall from './Viewer8thWall';
+import { isMobile } from 'react-device-detect';
+
 
 const ModelViewerComponent = ({
   modelUrl = 'https://cdn.glitch.com/5a4e620e-8d0d-4d82-a44f-08f272f0dd9d%2FBenzGLB3.glb?v=1616183257719',
@@ -50,24 +52,26 @@ const ModelViewerComponent = ({
           Launch AR
         </button>
       </model-viewer>
-      <button
-        style={{
-          backgroundColor: 'white',
-          borderRadius: '4px',
-          border: 'none',
-          position: 'absolute',
-          bottom: '0',
-          marginBottom: '10vh',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 1000,
-          padding: '8px 16px',
-          fontSize: '16px',
-        }}
-        onClick={handleAR}
-      >
-        Launch AP
-      </button>
+      {arProvider === '8thWall' && isMobile && (
+        <button
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '4px',
+            border: 'none',
+            position: 'absolute',
+            bottom: '0',
+            marginBottom: '10vh',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+            padding: '8px 16px',
+            fontSize: '16px',
+          }}
+          onClick={handleAR}
+        >
+          Launch AR
+        </button>
+      )}
     </div>
   );
 };
