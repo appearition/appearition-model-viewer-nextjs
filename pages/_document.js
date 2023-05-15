@@ -44,6 +44,8 @@ export default function Document() {
           ></script>
           {/* <script defer src='/js/draco_encoder.js'></script>
           <script defer src='/js/draco_decoder.js'></script> */}
+
+          <script defer src='/js/tap-place-cursor.js'></script>
           <script defer data-consolejs-channel="2035f807-6dea-a523-2c1b-70e876f527c5" src="https://remotejs.com/agent/agent.js"></script>
       </Head>
       <body>
