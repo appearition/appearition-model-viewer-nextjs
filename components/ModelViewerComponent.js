@@ -25,7 +25,7 @@ const ModelViewerComponent = ({
   }
 
   const qrClass = isMobile
-    ? 'absolute bottom-0 mb-20 w-full flex justify-center z-10'
+    ? 'absolute top-0 right-0 mt-4 mr-4 z-10'
     : 'absolute bottom-0 mb-20 right-0 mr-20 z-10';
 
   return (
@@ -83,7 +83,7 @@ const ModelViewerComponent = ({
           <div>
             <QRCode
               value={webArURL}
-              size='192'
+              size={isMobile ? 100 : 192}
               logoImage='/appearition_logo.jpeg'
               logoOpacity={1}
               removeQrCodeBehindLogo={true}
