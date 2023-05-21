@@ -2,10 +2,11 @@ export const apiToken = process.env.NEXT_PUBLIC_ApiToken; // Authentication toke
 export const tenant = process.env.NEXT_PUBLIC_Tenant; // Tenant ID of the tenant you want to upload to
 export const channelId = process.env.NEXT_PUBLIC_ChannelId; // Channel ID of the channel you want to upload to
 export const apiRootUrl = process.env.NEXT_PUBLIC_ApiRootUrl; // API root URL
+export const appId = process.env.NEXT_PUBLIC_AppId; // App ID of the app
 
 let providerName;
 let itemKey;
-let arTargetId;
+// let arTargetId;
 const apiUrl = `https://${apiRootUrl}/${tenant}/api`;
 
 export const uploadFile = async (file) => {
@@ -186,7 +187,11 @@ export const createARScene = async (
         throw new Error(`HTTP error ${response.status}`);
       }
       const data = await response.json();
-      return data.Data.arTargetId;
+
+      const arTargetId = data.Data.arTargetId;
+      const arTargetKey = data.Data.assetId;
+      console.log('arTargetKey', arTargetKey);
+      return { arTargetId, arTargetKey };
     } catch (error) {
       console.error('Error fetching data:', error);
       return null;
@@ -208,6 +213,7 @@ export const createARScene = async (
       isPrivate: false,
       contentItemProviderName: providerName,
       contentItemKey: itemKey,
+      mediaType: 'ModelView',
     };
 
     const requestUrl = `${apiUrl}/ArTarget/CreateMedia/${channelId}?arTargetId=${arTargetId}`;
@@ -235,7 +241,7 @@ export const createARScene = async (
   };
 
   try {
-    const arTargetId = await createARRecord(
+    const { arTargetId, arTargetKey } = await createARRecord(
       name,
       shortDescription,
       longDescription
@@ -255,7 +261,11 @@ export const createARScene = async (
     if (mediaData === null) {
       throw new Error('Error creating media');
     }
-    return mediaData.Data;
+
+    const sceneData = mediaData.Data;
+    console.log('sceneDataAppearition', sceneData);
+
+    return { sceneData, arTargetKey };
   } catch (error) {
     console.error('Error creating AR scene:', error);
     return null;
@@ -381,6 +391,163 @@ export const getProperties = async () => {
     }
     const data = await response.json();
     return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return null;
+  }
+};
+
+export const createURL = async (
+  arTargetId,
+  arTargetKey,
+  enableAccess = true
+) => {
+  const setAccess = async (arTargetId, enableAccess) => {
+    const requestUrl = `${apiUrl}/ArTarget/SetAnonymousWebArAccess/${channelId}?arTargetId=${arTargetId}&enableAccess=${enableAccess}`;
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'authentication-token': apiToken,
+        'api-version': 2,
+      },
+    };
+
+    try {
+      const response = await fetch(requestUrl, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return null;
+    }
+  };
+
+  // const getAccess = async (arTargetId) => {
+  //   const requestUrl = `${apiUrl}/ArTarget/GetAnonymousWebArAccessCredentials/${channelId}?arTargetId=${arTargetId}`;
+  //   const requestOptions = {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'authentication-token': apiToken,
+  //       'api-version': 2,
+  //     },
+  //   };
+
+  //   try {
+  //     const response = await fetch(requestUrl, requestOptions);
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     return data;
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //     return null;
+  //   }
+  // };
+
+  const updateCredentials = async (arTargetId) => {
+    const accessDetails = {
+      registeredApplicationId: appId,
+      accessToken: apiToken,
+    };
+
+    const requestUrl = `${apiUrl}/ArTarget/UpdateAnonymousWebArAccessCredentials/${channelId}?arTargetId=${arTargetId}`;
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'authentication-token': apiToken,
+        'api-version': 2,
+      },
+      body: JSON.stringify(accessDetails),
+    };
+
+    try {
+      const response = await fetch(requestUrl, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return null;
+    }
+  };
+
+  const publish = async (arTargetId, arTargetKey, arProvider) => {
+    const payload = {
+      arTargetId: arTargetId,
+      arTargetKey: arTargetKey,
+      channelId: channelId,
+    };
+    const requestUrl = `${apiUrl}/Publish/Publish/${channelId}?providerName=${arProvider}`;
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'authentication-token': apiToken,
+        'api-version': 2,
+      },
+      body: JSON.stringify(payload),
+    };
+
+    try {
+      const response = await fetch(requestUrl, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return null;
+    }
+  };
+
+  const getWebArURL = async (arTargetKey) => {
+    const requestUrl = `${apiUrl}/ArTarget/WebArViewerUrl/${channelId}?key=${arTargetKey}`;
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authentication-token': apiToken,
+        'api-version': 2,
+      },
+    };
+
+    try {
+      const response = await fetch(requestUrl, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return null;
+    }
+  };
+
+  try {
+    await setAccess(arTargetId, enableAccess);
+
+    const credentialsData = await updateCredentials(arTargetId);
+    console.log('credentialsData', credentialsData);
+
+    const arProvider = 'WebArModelViewerPublish';
+
+    const publishData = await publish(arTargetId, arTargetKey, arProvider);
+    console.log('publishData', publishData);
+
+    const webArURL = await getWebArURL(arTargetKey);
+    console.log('webArURL', webArURL);
+    return webArURL.Data;
   } catch (error) {
     console.error('Error fetching data:', error);
     return null;

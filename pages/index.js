@@ -6,6 +6,7 @@ import ModelViewerComponent from '@/components/ModelViewerComponent';
 export default function Home() {
   const [modelUrl, setModelUrl] = useState(null);
   const [arProvider, setArProvider] = useState('');
+  const [webArURL, setWebArURL] = useState('');
   return (
     <>
       <Head>
@@ -18,12 +19,17 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       {modelUrl && arProvider ? (
-        <ModelViewerComponent modelUrl={modelUrl} arProvider={arProvider} />
+        <ModelViewerComponent
+          modelUrl={modelUrl}
+          arProvider={arProvider}
+          webArURL={webArURL}
+        />
       ) : (
         <UploadModel
           setModelUrl={setModelUrl}
           arProvider={arProvider}
           setArProvider={setArProvider}
+          setWebArURL={setWebArURL}
         />
       )}
     </>

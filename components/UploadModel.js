@@ -9,11 +9,17 @@ import {
   apiRootUrl,
   uploadFile,
   createARScene,
+  createURL,
 } from '../utils/Appearition';
 
 import LoadingComponent from './LoadingComponent';
 
-const UploadModel = ({ arProvider, setArProvider, setModelUrl }) => {
+const UploadModel = ({
+  arProvider,
+  setArProvider,
+  setModelUrl,
+  setWebArURL,
+}) => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
@@ -60,7 +66,7 @@ const UploadModel = ({ arProvider, setArProvider, setModelUrl }) => {
     console.log('url', fileUrl);
     setModelUrl(fileUrl);
 
-    const sceneData = await createARScene(
+    const { sceneData, arTargetKey } = await createARScene(
       name,
       description,
       description,
@@ -70,11 +76,16 @@ const UploadModel = ({ arProvider, setArProvider, setModelUrl }) => {
       contentItemProviderName
     );
     console.log('sceneData', sceneData);
-    const { text: sceneName, mediaType } = sceneData || {};
+    console.log('arTargetKey1', arTargetKey);
+    const { text: sceneName, mediaType, arMediaId } = sceneData || {};
 
     console.log('sceneName', sceneName);
     console.log('mediaType', mediaType);
     setLoading(false);
+
+    const url = await createURL(arMediaId, arTargetKey);
+    console.log('url', url);
+    setWebArURL(url);
   };
 
   if (loading) return <LoadingComponent message={loadingText} />;
