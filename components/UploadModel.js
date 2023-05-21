@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-  createItem,
-  uploadModel,
-  getItem,
   apiToken,
   tenant,
   channelId,
@@ -26,13 +23,6 @@ const UploadModel = ({
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  useEffect(() => {
-    document.body.classList.add('overflow-auto', 'h-screen');
-    return () => {
-      document.body.classList.remove('overflow-auto', 'h-screen');
-    };
-  }, []);
-
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
@@ -48,25 +38,6 @@ const UploadModel = ({
         'Please fill in the required fields in the utils/Appearition.js file.'
       );
     }
-
-    const item = {
-      ProviderName: 'InternalContentLibrary',
-      Key: null,
-      Title: file.name,
-      IsThumbnailPrivate: false,
-    };
-
-    // const data = await createItem(item);
-
-    // const formData = new FormData();
-    // formData.append('file', file);
-
-    // const data2 = await uploadModel(formData);
-    // console.log('data2', data2);
-    // const data3 = await getItem();
-    // console.log('data3', data3);
-    // setLoadingText('Creating AR record');
-    // setModelUrl(data3.Data.Files[0].Url);
 
     const { fileUrl, contentItemKey, contentItemProviderName } =
       await uploadFile(file);
@@ -90,7 +61,7 @@ const UploadModel = ({
     console.log('mediaType', mediaType);
     setLoading(false);
 
-    const url = await createURL(arMediaId, arTargetKey);
+    const url = await createURL(arMediaId, arTargetKey, arProvider);
     console.log('url', url);
     setWebArURL(url);
   };
@@ -116,7 +87,7 @@ const UploadModel = ({
                 name='name'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className='block w-full mt-1 py-1 sm:py-2 border border-gray-300 rounded-md'
+                className='block w-full mt-1 py-1 px-1 sm:py-2 border border-gray-300 rounded-md'
               />
             </div>
             <div className='form-group mb-2 sm:mb-4 px-2 sm:px-4'>
@@ -124,7 +95,10 @@ const UploadModel = ({
                 htmlFor='description'
                 className='block text-lg font-bold mb-2'
               >
-                2. Description:
+                2. Description:{' '}
+                <span className='font-normal text-sm text-slate-600'>
+                  (Optional)
+                </span>
               </label>
               <input
                 type='text'
@@ -132,7 +106,7 @@ const UploadModel = ({
                 name='description'
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className='block w-full mt-1 py-1 sm:py-2 border border-gray-300 rounded-md'
+                className='block w-full mt-1 py-1 px-1 sm:py-2 border border-gray-300 rounded-md'
               />
             </div>
             <div className='form-group mb-2 sm:mb-4 px-2 sm:px-4'>
@@ -147,10 +121,10 @@ const UploadModel = ({
                 name='ar-provider'
                 value={arProvider}
                 onChange={(e) => setArProvider(e.target.value)}
-                className='block w-full mt-1 py-1 sm:py-2 border border-gray-300 rounded-md'
+                className='block w-full mt-1 py-1 px-1 sm:py-2 border border-gray-300 rounded-md'
               >
                 <option value='' disabled>
-                  Select an AR provider
+                  Select AR provider
                 </option>
                 <option value='8thWall'>8thWall</option>
                 <option value='ModelViewer'>ModelViewer</option>
@@ -169,7 +143,7 @@ const UploadModel = ({
                 name='model-file'
                 accept='.glb'
                 onChange={handleFileChange}
-                className='block w-full mt-1 py-1 sm:py-2 border border-gray-300 rounded-md'
+                className='block w-full mt-1 py-1 px-1 sm:py-2 border border-gray-300 rounded-md'
               />
             </div>
             <button
@@ -183,7 +157,7 @@ const UploadModel = ({
         </div>
       </div>
       <div className='mt-4 sm:mt-8 flex flex-col items-center'>
-        <h2 className='text-center text-xl sm:text-lg font-normal'>
+        <h2 className='text-center text-md sm:text-md font-normal'>
           Powered By:
         </h2>
         <img src='/appearition_logo.png' width={64} />

@@ -400,6 +400,7 @@ export const getProperties = async () => {
 export const createURL = async (
   arTargetId,
   arTargetKey,
+  arProvider,
   enableAccess = true
 ) => {
   const setAccess = async (arTargetId, enableAccess) => {
@@ -425,30 +426,6 @@ export const createURL = async (
       return null;
     }
   };
-
-  // const getAccess = async (arTargetId) => {
-  //   const requestUrl = `${apiUrl}/ArTarget/GetAnonymousWebArAccessCredentials/${channelId}?arTargetId=${arTargetId}`;
-  //   const requestOptions = {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'authentication-token': apiToken,
-  //       'api-version': 2,
-  //     },
-  //   };
-
-  //   try {
-  //     const response = await fetch(requestUrl, requestOptions);
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error ${response.status}`);
-  //     }
-  //     const data = await response.json();
-  //     return data;
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //     return null;
-  //   }
-  // };
 
   const updateCredentials = async (arTargetId) => {
     const accessDetails = {
@@ -510,6 +487,31 @@ export const createURL = async (
     }
   };
 
+  const get8thWallURL = async (arTargetKey) => {
+    const requestUrl = `https://login.appearition.com/arcms08/PublishWebArEighthWallMarkerless/GetViewerUrl/${channelId}?arTargetId=${arTargetId}`;
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authentication-token': apiToken,
+        'api-version': 2,
+      },
+    };
+
+    try {
+      // const response = await fetch(requestUrl, requestOptions);
+      // if (!response.ok) {
+      //   throw new Error(`HTTP error ${response.status}`);
+      // }
+      // const data = await response.json();
+      const url = `https://login.appearition.com/arcms08/PublishWebArEighthWallMarkerless/ViewerProtected/${channelId}?key=${arTargetKey}`;
+      return url;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return null;
+    }
+  };
+
   const getWebArURL = async (arTargetKey) => {
     const requestUrl = `${apiUrl}/ArTarget/WebArViewerUrl/${channelId}?key=${arTargetKey}`;
     const requestOptions = {
@@ -527,7 +529,32 @@ export const createURL = async (
         throw new Error(`HTTP error ${response.status}`);
       }
       const data = await response.json();
-      return data;
+      return data.Data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return null;
+    }
+  };
+
+  const getProperties = async (arTargetId) => {
+    const requestUrl = `${apiUrl}/ArTarget/GetProperties/${channelId}?arTargetId=${arTargetId}`;
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authentication-token': apiToken,
+        'api-version': 2,
+      },
+    };
+
+    try {
+      const response = await fetch(requestUrl, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.Data;
     } catch (error) {
       console.error('Error fetching data:', error);
       return null;
@@ -540,14 +567,30 @@ export const createURL = async (
     const credentialsData = await updateCredentials(arTargetId);
     console.log('credentialsData', credentialsData);
 
-    const arProvider = 'WebArModelViewerPublish';
+    let provider;
 
-    const publishData = await publish(arTargetId, arTargetKey, arProvider);
+    if (arProvider === 'ModelViewer') {
+      provider = 'WebArModelViewerPublish';
+    } else if (arProvider === '8thWall') {
+      provider = 'WebArEighthWallMarkerlessPublish';
+    }
+
+    const publishData = await publish(arTargetId, arTargetKey, provider);
     console.log('publishData', publishData);
 
-    const webArURL = await getWebArURL(arTargetKey);
+    const properties = await getProperties(arTargetId);
+
+    console.log('properties', properties);
+
+    let webArURL;
+
+    if (arProvider === 'ModelViewer') {
+      webArURL = await getWebArURL(arTargetKey);
+    } else if (arProvider === '8thWall') {
+      webArURL = await get8thWallURL(arTargetKey);
+    }
     console.log('webArURL', webArURL);
-    return webArURL.Data;
+    return webArURL;
   } catch (error) {
     console.error('Error fetching data:', error);
     return null;
