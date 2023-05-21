@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   createItem,
   uploadModel,
@@ -25,6 +25,13 @@ const UploadModel = ({
   const [loadingText, setLoadingText] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+
+  useEffect(() => {
+    document.body.classList.add('overflow-auto', 'h-screen');
+    return () => {
+      document.body.classList.remove('overflow-auto', 'h-screen');
+    };
+  }, []);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -91,15 +98,15 @@ const UploadModel = ({
   if (loading) return <LoadingComponent message={loadingText} />;
 
   return (
-    <div className='min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12'>
-      <div className='relative py-3 sm:max-w-xl sm:mx-auto'>
-        <div className='absolute inset-0 bg-gradient-to-r from-cyan-400 to-light-blue-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl'></div>
-        <div className='relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20'>
-          <h1 className='text-center text-2xl font-semibold mb-8'>
+    <div className='h-screen overflow-auto bg-gray-100 py-2 sm:py-6 flex flex-col justify-center'>
+      <div className='relative py-2 sm:py-3 sm:max-w-xl sm:mx-auto'>
+        <div className='absolute inset-0 bg-gradient-to-r from-red-200 to-pink-300 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl'></div>
+        <div className='relative px-2 sm:px-4 py-6 sm:py-10 bg-white shadow-lg sm:rounded-3xl'>
+          <h1 className='text-center text-xl sm:text-2xl font-semibold mb-4 sm:mb-8'>
             Create AR experience
           </h1>
           <form onSubmit={processUpload}>
-            <div className='form-group mb-4'>
+            <div className='form-group mb-2 sm:mb-4 px-2 sm:px-4'>
               <label htmlFor='name' className='block text-lg font-bold mb-2'>
                 1. Name:
               </label>
@@ -109,10 +116,10 @@ const UploadModel = ({
                 name='name'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className='block w-full mt-1 px-4 py-2 border border-gray-300 rounded-md'
+                className='block w-full mt-1 py-1 sm:py-2 border border-gray-300 rounded-md'
               />
             </div>
-            <div className='form-group mb-4'>
+            <div className='form-group mb-2 sm:mb-4 px-2 sm:px-4'>
               <label
                 htmlFor='description'
                 className='block text-lg font-bold mb-2'
@@ -125,10 +132,10 @@ const UploadModel = ({
                 name='description'
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className='block w-full mt-1 px-4 py-2 border border-gray-300 rounded-md'
+                className='block w-full mt-1 py-1 sm:py-2 border border-gray-300 rounded-md'
               />
             </div>
-            <div className='form-group mb-4'>
+            <div className='form-group mb-2 sm:mb-4 px-2 sm:px-4'>
               <label
                 htmlFor='ar-provider'
                 className='block text-lg font-bold mb-2'
@@ -140,7 +147,7 @@ const UploadModel = ({
                 name='ar-provider'
                 value={arProvider}
                 onChange={(e) => setArProvider(e.target.value)}
-                className='block w-full mt-1 px-4 py-2 border border-gray-300 rounded-md'
+                className='block w-full mt-1 py-1 sm:py-2 border border-gray-300 rounded-md'
               >
                 <option value='' disabled>
                   Select an AR provider
@@ -149,7 +156,7 @@ const UploadModel = ({
                 <option value='ModelViewer'>ModelViewer</option>
               </select>
             </div>
-            <div className='form-group mb-4'>
+            <div className='form-group mb-2 sm:mb-4 px-2 sm:px-4'>
               <label
                 htmlFor='model-file'
                 className='block text-lg font-bold mb-2'
@@ -162,18 +169,24 @@ const UploadModel = ({
                 name='model-file'
                 accept='.glb'
                 onChange={handleFileChange}
-                className='block w-full mt-1 px-4 py-2 border border-gray-300 rounded-md'
+                className='block w-full mt-1 py-1 sm:py-2 border border-gray-300 rounded-md'
               />
             </div>
             <button
               type='submit'
               id='upload-button'
-              className='mt-4 w-full py-2 px-4 bg-green-500 text-white rounded-md hover:bg-green-600'
+              className='mt-2 sm:mt-4 w-full py-1 sm:py-2 bg-red-500 text-white rounded-md hover:bg-red-600'
             >
               Create
             </button>
           </form>
         </div>
+      </div>
+      <div className='mt-4 sm:mt-8 flex flex-col items-center'>
+        <h2 className='text-center text-xl sm:text-lg font-normal'>
+          Powered By:
+        </h2>
+        <img src='/appearition_logo.png' width={64} />
       </div>
     </div>
   );
