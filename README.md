@@ -2,7 +2,8 @@
 
 A sample project demostrating how to use the Appearition platform modules for creating and publishing web augmented reality experiences with NextJs.
 
-![Demo Video](public/demo.gif)
+<!-- ![Demo Video](public/demo.gif) -->
+<img src="public/demo.gif" width="888" />
 
 ### Getting Started
 
