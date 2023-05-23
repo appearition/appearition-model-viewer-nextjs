@@ -1,8 +1,6 @@
 # Appearition Model Viewer: NextJs
 
-## Moudle-ContentLib
-
-A sample project demostrating how to use the content libray module for managing assets (3d models, images, videos or any other form of media).
+A sample project demostrating how to use the Appearition platform modules for creating and publishing web augmented reality experiences with NextJs.
 
 ### Getting Started
 
@@ -14,6 +12,7 @@ NEXT_PUBLIC_ApiToken= //The auth token you created while registering the applica
 NEXT_PUBLIC_Tenant=   //The tenant name of your developer account. This is the name you used when you signed up.
 NEXT_PUBLIC_ChannelId=  //The channel id or project id in the settings page.
 NEXT_PUBLIC_ApiRootUrl= // API root URL
+NEXT_PUBLIC_AppId= // The application id of your registered application.
 ```
 
 3. Run the development server:
@@ -29,6 +28,10 @@ pnpm dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 4. The functions with APIs for uploading and retrieving assets are in `utils/Appearition.js` file. You can use these functions to integrate the content library module in your application.
+
+### Flow Diagram
+
+![Flow Diagram](public/flow-diagram.png)
 
 ### Troubleshooting
 
