@@ -41,6 +41,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    - InternalContentLibraryCreator
    - InternalContentLibraryEditorAll
    - InternalContentLibraryViewerAll
+   - ArCreator
+   - ArPublisher
+   - ArViewerAllPublished
+   - ArViewerAnonymous
+   - ChannelAccessAll
+   - UserManager
 4. Assign your channel to the registered application.
 
 ### Deploy on Vercel
