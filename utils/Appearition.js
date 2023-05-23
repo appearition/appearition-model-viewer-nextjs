@@ -214,6 +214,10 @@ export const createARScene = async (
       contentItemProviderName: providerName,
       contentItemKey: itemKey,
       mediaType: 'ModelView',
+      isTracking: true,
+      scaleX: 1,
+      scaleY: 1,
+      scaleZ: 1,
     };
 
     const requestUrl = `${apiUrl}/ArTarget/CreateMedia/${channelId}?arTargetId=${arTargetId}`;
@@ -265,7 +269,7 @@ export const createARScene = async (
     const sceneData = mediaData.Data;
     console.log('sceneDataAppearition', sceneData);
 
-    return { sceneData, arTargetKey };
+    return { sceneData, arTargetId, arTargetKey };
   } catch (error) {
     console.error('Error creating AR scene:', error);
     return null;
@@ -488,7 +492,7 @@ export const createURL = async (
   };
 
   const get8thWallURL = async (arTargetKey) => {
-    const requestUrl = `https://login.appearition.com/arcms08/PublishWebArEighthWallMarkerless/GetViewerUrl/${channelId}?arTargetId=${arTargetId}`;
+    const requestUrl = `https://login.appearition.com/${tenant}/PublishWebArEighthWallMarkerless/GetViewerUrl/${channelId}?arTargetId=${arTargetId}`;
     const requestOptions = {
       method: 'GET',
       headers: {
@@ -504,7 +508,7 @@ export const createURL = async (
       //   throw new Error(`HTTP error ${response.status}`);
       // }
       // const data = await response.json();
-      const url = `https://login.appearition.com/arcms08/PublishWebArEighthWallMarkerless/ViewerProtected/${channelId}?key=${arTargetKey}`;
+      const url = `https://login.appearition.com/arcms08/PublishWebArEighthWallMarkerless/Viewer/${channelId}?key=${arTargetKey}&accessToken=${apiToken}`;
       return url;
     } catch (error) {
       console.error('Error fetching data:', error);

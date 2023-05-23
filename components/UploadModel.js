@@ -39,31 +39,38 @@ const UploadModel = ({
       );
     }
 
-    const { fileUrl, contentItemKey, contentItemProviderName } =
-      await uploadFile(file);
-    console.log('url', fileUrl);
-    setModelUrl(fileUrl);
+    try {
+      const { fileUrl, contentItemKey, contentItemProviderName } =
+        await uploadFile(file);
+      console.log('url', fileUrl);
+      setModelUrl(fileUrl);
 
-    const { sceneData, arTargetKey } = await createARScene(
-      name,
-      description,
-      description,
-      fileUrl,
-      arProvider,
-      contentItemKey,
-      contentItemProviderName
-    );
-    console.log('sceneData', sceneData);
-    console.log('arTargetKey1', arTargetKey);
-    const { text: sceneName, mediaType, arMediaId } = sceneData || {};
+      setLoadingText('Creating AR record');
 
-    console.log('sceneName', sceneName);
-    console.log('mediaType', mediaType);
-    setLoading(false);
+      const { sceneData, arTargetId, arTargetKey } = await createARScene(
+        name,
+        description,
+        description,
+        fileUrl,
+        arProvider,
+        contentItemKey,
+        contentItemProviderName
+      );
+      console.log('sceneData', sceneData);
+      console.log('arTargetKey1', arTargetKey);
+      const { text: sceneName, mediaType, arMediaId } = sceneData || {};
 
-    const url = await createURL(arMediaId, arTargetKey, arProvider);
-    console.log('url', url);
-    setWebArURL(url);
+      console.log('sceneName', sceneName);
+      console.log('mediaType', mediaType);
+
+      const url = await createURL(arTargetId, arTargetKey, arProvider);
+      console.log('url', url);
+      setWebArURL(url);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) return <LoadingComponent message={loadingText} />;
