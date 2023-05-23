@@ -31,7 +31,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### Flow Diagram
 
-![Flow Diagram](public/flow-diagram.png)
+![Flow Diagram](public/flow-diagram-re.png)
 
 ### Troubleshooting
 
